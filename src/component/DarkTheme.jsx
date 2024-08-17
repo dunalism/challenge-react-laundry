@@ -14,7 +14,7 @@ const DarkMode = ({ className }) => {
   };
 
   return (
-    <div className={className}>
+    <div className={`inline-block ${className}`}>
       <label className="swap swap-rotate">
         {/* this hidden checkbox controls the state */}
         <input
