@@ -1,4 +1,5 @@
 import DarkMode from "../component/DarkTheme";
+import TableProduct from "../component/TableProduct";
 
 export default function DashboardLaundry() {
   return (
@@ -43,7 +44,8 @@ export default function DashboardLaundry() {
           <DarkMode className={""} />
         </div>
         {/* Page content here */}
-        Content
+
+        <TableProduct />
       </div>
       <div className="drawer-side">
         <label
