@@ -1,5 +1,4 @@
 import {
-  getKeyValue,
   Table,
   TableBody,
   TableCell,
@@ -7,41 +6,52 @@ import {
   TableHeader,
   TableRow,
 } from "@nextui-org/table";
+import { useCallback, useState } from "react";
+import EditIcon from "../assets/EditIcon";
+import DeleteIcon from "../assets/DeleteIcon";
+import { columns, productDummy, rows } from "../Data/dataProduct";
+import AddProduct from "./AddProduct";
 
 const TableProduct = () => {
-  const rows = [
-    {
-      key: "1",
-      product: "Cuci, Kering, Setrika",
-      qty: "3kg",
-      price: "Rp. 15.000",
-      action: "edit hapus",
-    },
-    {
-      key: "2",
-      product: "Cuci, Kering, Lipat",
-      qty: "3kg",
-      price: "Rp. 15.000",
-      action: "edit hapus",
-    },
-    {
-      key: "3",
-      product: "Paket Setrika",
-      qty: "3kg",
-      price: "Rp. 15.000",
-      action: "edit hapus",
-    },
-  ];
+  let rowVal = {};
+  const [rowValue, setRowValue] = useState(rows);
+  console.log(rowValue);
+  const addPaket = () => {
+    setRowValue([...rowValue, productDummy]);
+    console.log(rowValue);
+  };
+  const delPaket = () => {};
 
-  const columns = [
-    { key: "product", label: "Paket Laundry" },
-    { key: "qty", label: "Jumlah" },
-    { key: "price", label: "Harga" },
-    { key: "action", label: "" },
-  ];
+  const renderCell = useCallback((row, columnKey) => {
+    const cellValue = row[columnKey];
+    rowVal = cellValue;
+    switch (columnKey) {
+      case "action":
+        return (
+          <div className="relative flex items-center gap-2">
+            <div className="tooltip" data-tip="Edit paket">
+              <button className="text-lg text-default-400 active:opacity-50">
+                <EditIcon />
+              </button>
+            </div>
+            <div className="tooltip" data-tip="Hapus paket">
+              <button className="text-lg text-danger active:opacity-50">
+                <DeleteIcon />
+              </button>
+            </div>
+          </div>
+        );
+      default:
+        return cellValue;
+    }
+  }, []);
 
   return (
     <div className="card card-bordered">
+      <div className="flex w-5/6">
+        <p className="flex-grow">Daftar Paket Laundry</p>
+        <AddProduct />
+      </div>
       <Table aria-label="product table">
         <TableHeader columns={columns}>
           {(column) => (
@@ -50,11 +60,11 @@ const TableProduct = () => {
             </TableColumn>
           )}
         </TableHeader>
-        <TableBody items={rows}>
+        <TableBody items={rowValue}>
           {(item) => (
             <TableRow className="text-left" key={item.key}>
               {(columnKey) => (
-                <TableCell>{getKeyValue(item, columnKey)}</TableCell>
+                <TableCell>{renderCell(item, columnKey)}</TableCell>
               )}
             </TableRow>
           )}
