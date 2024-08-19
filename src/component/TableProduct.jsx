@@ -15,10 +15,12 @@ import AddProduct from "./AddProduct";
 const TableProduct = () => {
   let rowVal = {};
   const [rowValue, setRowValue] = useState(rows);
-  console.log(rowValue);
+  console.log(`rowValue=`, rowValue);
+  console.count("render");
+
   const addPaket = () => {
     setRowValue([...rowValue, productDummy]);
-    console.log(rowValue);
+    console.log(`rowValue=`, rowValue);
   };
   const delPaket = () => {};
 
@@ -30,7 +32,10 @@ const TableProduct = () => {
         return (
           <div className="relative flex items-center gap-2">
             <div className="tooltip" data-tip="Edit paket">
-              <button className="text-lg text-default-400 active:opacity-50">
+              <button
+                onClick={() => addPaket()}
+                className="text-lg text-default-400 active:opacity-50"
+              >
                 <EditIcon />
               </button>
             </div>

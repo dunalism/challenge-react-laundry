@@ -5,6 +5,9 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import DarkMode from "../component/DarkTheme";
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../store/authSlice";
+import { useEffect } from "react";
 
 const SignInSchema = z.object({
   username: z.string().min(4),
@@ -12,6 +15,10 @@ const SignInSchema = z.object({
 });
 
 const LoginPage = () => {
+  const { loading, error, user, token } = useSelector((store) => store.auth);
+  const dispatch = useDispatch();
+  console.log(user);
+
   const form = useForm({
     defaultValues: {
       username: "",
@@ -22,16 +29,17 @@ const LoginPage = () => {
 
   const navigate = useNavigate();
 
-  const loginUser = (data) => {
-    if (
-      data.username === "username" &&
-      data.password === "bismillahirrahmanirrahim"
-    ) {
-      navigate("/example");
-    } else {
-      alert("Login Gagal");
-    }
+  const signIn = (data) => {
+    dispatch(loginUser(data));
   };
+
+  useEffect(() => {
+    if (user !== null) {
+      navigate("/dashboard");
+    } else if (error) {
+      alert(`Login Gagal: ${error}`);
+    }
+  }, [user, error]);
 
   return (
     <div>
@@ -46,7 +54,7 @@ const LoginPage = () => {
           <div className="card-body p-4">
             <form
               className="flex flex-col gap-4"
-              onSubmit={form.handleSubmit(loginUser)}
+              onSubmit={form.handleSubmit(signIn)}
             >
               <Controller
                 name="username"

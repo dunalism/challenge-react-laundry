@@ -40,10 +40,7 @@ const columns = [
   { key: "product", label: "Paket Laundry" },
   { key: "qty", label: "Jumlah" },
   { key: "price", label: "Harga" },
-  {
-    key: "action",
-    label: "Opsi",
-  },
+  { key: "action", label: "Opsi" },
 ];
 
 export { rows, columns, productDummy2, productDummy, addProduct };

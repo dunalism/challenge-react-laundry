@@ -1,7 +1,11 @@
+import { useSelector } from "react-redux";
 import DarkMode from "../component/DarkTheme";
 import TableProduct from "../component/TableProduct";
 
 export default function DashboardLaundry() {
+  const state = useSelector((store) => store.auth);
+  console.log(`store.auth.user=${state.user}`);
+
   return (
     <div className="drawer">
       <input id="my-drawer-3" type="checkbox" className="drawer-toggle" />
