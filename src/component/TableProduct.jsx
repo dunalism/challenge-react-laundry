@@ -11,12 +11,15 @@ import EditIcon from "../assets/EditIcon";
 import DeleteIcon from "../assets/DeleteIcon";
 import { columns, productDummy, rows } from "../Data/dataProduct";
 import AddProduct from "./AddProduct";
+import { useSelector } from "react-redux";
 
 const TableProduct = () => {
-  let rowVal = {};
+  // eslint-disable-next-line no-unused-vars
+  const { user, token } = useSelector((state) => state.auth);
+  console.log(`token= ${token}`);
+
   const [rowValue, setRowValue] = useState(rows);
   console.log(`rowValue=`, rowValue);
-  console.count("render");
 
   const addPaket = () => {
     setRowValue([...rowValue, productDummy]);
@@ -26,7 +29,7 @@ const TableProduct = () => {
 
   const renderCell = useCallback((row, columnKey) => {
     const cellValue = row[columnKey];
-    rowVal = cellValue;
+
     switch (columnKey) {
       case "action":
         return (
@@ -49,6 +52,7 @@ const TableProduct = () => {
       default:
         return cellValue;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (

@@ -6,18 +6,23 @@ import { z } from "zod";
 import { useNavigate } from "react-router-dom";
 import DarkMode from "../component/DarkTheme";
 import { useDispatch, useSelector } from "react-redux";
-import { loginUser } from "../store/authSlice";
+import { loginUser, logout } from "../store/authSlice";
 import { useEffect } from "react";
 
+//untuk validasi input
 const SignInSchema = z.object({
   username: z.string().min(4),
   password: z.string().min(8),
 });
 
 const LoginPage = () => {
-  const { loading, error, user, token } = useSelector((store) => store.auth);
+  // eslint-disable-next-line no-unused-vars
+  let { loading, error, user, token } = useSelector((store) => store.auth);
   const dispatch = useDispatch();
-  console.log(user);
+
+  console.log("token from storage", localStorage.getItem("token"));
+
+  console.log("store.auth.user", user);
 
   const form = useForm({
     defaultValues: {
@@ -33,13 +38,32 @@ const LoginPage = () => {
     dispatch(loginUser(data));
   };
 
+  //validasi login
   useEffect(() => {
     if (user !== null) {
       navigate("/dashboard");
+      localStorage.setItem("token", token);
+      localStorage.setItem("user", user);
     } else if (error) {
       alert(`Login Gagal: ${error}`);
     }
-  }, [user, error]);
+  }, [token, error, user, navigate]);
+
+  //validasi saat navigasi halaman login
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      let confirmLogin = confirm("Anda telah login, ingin login ke akun lain?");
+      if (confirmLogin) {
+        localStorage.removeItem("token");
+        localStorage.removeItem("user");
+        dispatch(logout());
+        navigate("/auth/sign-in");
+      } else {
+        navigate("/dashboard");
+      }
+    }
+  }, []);
 
   return (
     <div>

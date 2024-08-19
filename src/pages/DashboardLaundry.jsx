@@ -1,10 +1,36 @@
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import DarkMode from "../component/DarkTheme";
 import TableProduct from "../component/TableProduct";
+import { useEffect } from "react";
+import useCheckToken from "../lib/useCheckToken";
+import { logout, setGlobalData } from "../store/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function DashboardLaundry() {
-  const state = useSelector((store) => store.auth);
-  console.log(`store.auth.user=${state.user}`);
+  // eslint-disable-next-line no-unused-vars
+  let { user, token } = useSelector((state) => state.auth);
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const logOut = () => {
+    const confirmLogout = confirm("yakin ingin logout?");
+    if (confirmLogout) {
+      dispatch(logout());
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      navigate("/");
+    }
+  };
+
+  //validasi saat navigasi ke halaman dashboard
+  useCheckToken();
+
+  //menyimpan data response API ke global state
+  useEffect(() => {
+    dispatch(setGlobalData());
+  }, []);
 
   return (
     <div className="drawer">
@@ -44,6 +70,9 @@ export default function DashboardLaundry() {
                 <a>Transaksi 1</a>
               </li>
             </ul>
+          </div>
+          <div onClick={() => logOut()} className="btn">
+            Log out
           </div>
           <DarkMode className={""} />
         </div>
